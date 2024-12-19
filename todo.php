@@ -8,7 +8,7 @@ $remarks = '';
 $readyToStore = false;
 
 function connectToDB() {
-    $conn = new mysqli("localhost", "root", "", "your_database_name"); // Update with your database name
+    $conn = new mysqli("localhost", "root", "", "T_TODO"); 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
@@ -58,7 +58,7 @@ if ($conn) {
                 <p>Urgency: ' . (int)$row['Urgencyrank'] . '</p>
                 <p>Deadline: ' . ($row['deadline_date'] ? date('d M Y', strtotime($row['deadline_date'])) : 'No deadline') . '</p>
                 <p>Remarks: ' . htmlspecialchars($row['Remarks']) . '</p>
-                <p>Status: ' . ($row['is_completed'] ? 'Completed' : 'Pending') . '</p>
+                <p>Status: ' . ($row['is_completed'] ? 'Y' : 'N') . '</p>
             </div>';
         }
     } else {

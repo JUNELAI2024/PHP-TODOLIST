@@ -8,7 +8,7 @@ $remarks = '';
 $readyToStore = false;
 
 function connectToDB() {
-    $conn = new mysqli("localhost", "root", "", "T_TODO"); 
+    $conn = new mysqli("localhost", "root", "", "DB_TODO"); 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
@@ -24,8 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])) {
     $deadlineDate = htmlspecialchars(trim($_POST['deadline_date']));
     $remarks = htmlspecialchars(trim($_POST['remarks']));
 
-    // Validate input
-    if (!empty($taskdesc)) {
+    if (!empty($taskdesc) && !empty($assignedTo) && isset($urgencyRank)) {
         $readyToStore = true;
     }
 }
@@ -35,7 +34,7 @@ if ($readyToStore && $conn) {
     $stmt->bind_param("sisss", $taskdesc, $urgencyRank, $assignedTo, $deadlineDate, $remarks);
     
     if ($stmt->execute()) {
-        echo "<p>Task added successfully!</p>";
+        echo "<p>Task created successfully!</p>";
     } else {
         echo "<p>Error: " . $stmt->error . "</p>";
     }
@@ -62,7 +61,7 @@ if ($conn) {
             </div>';
         }
     } else {
-        $tasks = "<p>No tasks available.</p>";
+        $tasks = "<p>No tasks.</p>";
     }
 }
 
@@ -135,10 +134,10 @@ $conn->close();
                 <input type="text" name="taskdesc" required>
                 
                 <label for="urgencyrank">Urgency Rank (0-10):</label>
-                <input type="number" name="urgencyrank" min="0" max="10" value="0">
+                <input type="number" name="urgencyrank" min="0" max="10" value="0" required>
                 
                 <label for="assigned_to">Assigned To:</label>
-                <input type="text" name="assigned_to">
+                <input type="text" name="assigned_to" required>
                 
                 <label for="deadline_date">Deadline Date:</label>
                 <input type="date" name="deadline_date">
